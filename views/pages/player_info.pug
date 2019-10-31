@@ -1,0 +1,115 @@
+//- player-info.pug
+include ../partials/header.pug
+include ../partials/menu.pug
+
+div.container
+  br
+  div.row
+    div.col-4
+      div.card
+        //- TODO: Modify the pug code below to conditionally set the image_src
+
+        - var img_src 
+        if player_id
+          if result_2
+            for item in result_2
+              - img_src = item.img_src
+        else 
+          - img_src = '../../resources/img/helmet.jpg'
+        
+        img.card-img-top#player_img(src=img_src, alt="Football Player")
+        div.card-body.mx-auto
+          form.form(action="/player_info/select_player", method="get")
+            select.custom-select(name="player_choice", onchange="this.form.submit()")
+              - var name = ''
+              if result_1
+                for item in result_1
+                  - name = item.name
+              if player_id
+                option(selected value=player_id) #{name}
+                if result_1
+                  for item in result_1
+                    if player_id != item.id
+                      option(value=item.id)= item.name
+              else
+                option(selected) Select Player
+                if result_1
+                  for item in result_1
+                      option(value=item.id)= item.name
+              //- TODO: Populate the select with player options. Set the value to the player's id and display the player's name.
+              
+    div.col-8
+      div.table-responsive
+        - var gp = 0
+        if player_id
+          if result_3
+            for item in result_3
+              - gp = parseFloat(item.count)
+        - var year = ''
+        - var major = ''
+        - var pass_y = 0
+        - var rush_y = 0
+        - var rec_y = 0
+        if player_id
+          if result_2
+            for item in result_2
+              - year = item.year
+              - major = item.major
+              - pass_y = parseFloat(item.passing_yards)
+              - rush_y = parseFloat(item.rushing_yards)
+              - rec_y = parseFloat(item.receiving_yards)
+              
+        table.table
+          //- TODO: Set the player's information. On select, fill in the player's information in each of the field below. You will need to calculate the average rushing, receiving, and passing yards.
+          tr
+            th Year
+            if player_id
+              td #{year}
+            else
+              td ?
+          tr
+            th Major
+            if player_id
+              td #{major}
+            else
+              td ?
+          tr
+            th Games Played
+            if player_id
+              if result_3
+                td #{gp}
+              else
+                td ?
+            else
+              td ?
+          tr
+            if player_id
+              td Passing Yards: #{pass_y}
+            else
+              td Passing Yards: ?
+            if player_id
+              td Avg. Passing Yards: #{parseFloat(pass_y / gp).toFixed(2)}
+            else
+              td Avg. Passing Yards: ?
+          tr
+            if player_id
+              td Rushing Yards: #{rush_y}
+            else
+              td Rushing Yards: ?
+            if player_id
+              td Avg. Rushing Yards: #{parseFloat(rush_y / gp).toFixed(2)}
+            else
+              td Avg. Rushing Yards: ?
+          tr
+          if player_id
+            td Receiving Yards: #{rec_y}
+          else
+            td Receiving Yards: ?
+          if player_id
+            td Avg. Receiving Yards: #{parseFloat(rec_y / gp).toFixed(2)}
+          else
+            td Avg. Receiving Yards: ?
+            
+            
+
+include ../partials/footer.pug
