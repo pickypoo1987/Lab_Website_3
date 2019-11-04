@@ -7,8 +7,6 @@ div.container
   div.row
     div.col-4
       div.card
-        //- TODO: Modify the pug code below to conditionally set the image_src
-
         - var img_src 
         if player_id
           if result_2
@@ -21,16 +19,14 @@ div.container
         div.card-body.mx-auto
           form.form(action="/player_info/select_player", method="get")
             select.custom-select(name="player_choice", onchange="this.form.submit()")
-              - var name = ''
-              if result_1
-                for item in result_1
-                  - name = item.name
-              if player_id
-                option(selected value=player_id) #{name}
+              if player_id  
                 if result_1
                   for item in result_1
-                    if player_id != item.id
+                    if player_id == item.id
+                      option(selected value=item.id)= item.name
+                    else 
                       option(value=item.id)= item.name
+
               else
                 option(selected) Select Player
                 if result_1
